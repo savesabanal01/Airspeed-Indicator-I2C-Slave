@@ -24,9 +24,10 @@ float startTime;
 float endTime;
 float airSpeed = 0;          // Indicated AirSpeed from Sim
 float ASIneedleRotation = 0; // angle of rotation of needle based on the Indicated AirSpeed
-float instrumentBrightnessRatio = 0;
-int instrumentBrightness = 0;
-float fps = 0; // frames per second for testing
+float instrumentBrightnessRatio = 1;
+int instrumentBrightness = 1;
+float prevInstrumentBrightnessRatio = 0; // previous value of instrument brightness. If no change do not set instrument brightness to avoid flickers
+float fps = 0;                           // frames per second for testing
 
 int16_t messageID = 0;            // will be set to the messageID coming from the connector
 char message[MAX_LENGTH_MESSAGE]; // contains the message which belongs to the messageID
@@ -62,19 +63,20 @@ void setup()
 
   tft.begin();
   tft.setRotation(1);
-  tft.fillScreen(TFT_BLACK);
+  tft.fillScreen(PANEL_COLOR);
   tft.setPivot(320, 160);
   tft.setSwapBytes(true);
   tft.pushImage(160, 80, 160, 160, logo, TFT_BLACK);
   delay(3000);
-  tft.fillScreen(TFT_BLACK);
+  tft.fillScreen(PANEL_COLOR);
+  tft.fillCircle(240, 160, 160, TFT_BLACK);
 
   tft.setSwapBytes(true);
   tft.pushImage(80, 0, 320, 320, instrument_bezel, TFT_BLACK);
   mainSpr.setColorDepth(16);
   mainSpr.createSprite(320, 320);
   mainSpr.setSwapBytes(true);
-  mainSpr.fillSprite(TFT_BLUE);
+  mainSpr.fillSprite(TFT_BLACK);
   mainSpr.pushImage(0, 0, 320, 320, main_gauge);
   mainSpr.setPivot(160, 160);
 
@@ -110,40 +112,6 @@ void loop()
   checkI2CMesage();
   startTime = millis();
 
-  // asiInfoSpr.setSwapBytes(true);
-  // asiInfoSpr.pushImage(0, 0, 150, 50, asi_info);
-  // asiInfoSpr.drawString(String(airSpeed), 75, 5);
-  // asiInfoSpr.pushSprite(0, 0);
-
-  // tasInfoSpr.setSwapBytes(true);
-  // tasInfoSpr.pushImage(0, 0, 150, 50, tas_info);
-  // tasInfoSpr.drawString(String(airSpeed), 75, 5);
-  // tasInfoSpr.pushSprite(0, 65);
-
-  // altitudeInfoSpr.setSwapBytes(true);
-  // altitudeInfoSpr.pushImage(0, 0, 150, 50, altitude_info);
-  // altitudeInfoSpr.drawString(String(airSpeed), 75, 5);
-  // altitudeInfoSpr.pushSprite(0, 130);
-
-  // vsiInfoSpr.setSwapBytes(true);
-  // vsiInfoSpr.pushImage(0, 0, 150, 50, vsi_info);
-  // vsiInfoSpr.drawString(String(airSpeed), 75, 5);
-  // vsiInfoSpr.pushSprite(0, 195);
-
-  // baroInfoSpr.setSwapBytes(true);
-  // baroInfoSpr.pushImage(0, 0, 150, 50, baro_info);
-  // baroInfoSpr.drawString(String(airSpeed), 75, 5);
-  // baroInfoSpr.pushSprite(0, 260);
-
-  // tft.drawString("Message ID", 0, 0, 2);
-  // tft.drawString(String(messageID), 0, 20, 2);
-  // tft.drawString("Airspeed", 0, 40, 2);
-  // tft.drawString(String(airSpeed), 6, 60, 2);
-  // tft.drawString("Brightness", 0, 80, 2);
-  // tft.drawString(String(instrumentBrightnessRatio), 6, 100, 2);
-  // tft.drawString("FPS: ", 0, 120, 2);
-  // tft.drawString(String(fps), 0, 140, 2);
-
   if (airSpeed <= 40)
     ASIneedleRotation = scaleValue(airSpeed, 0, 40, 0, 20);
   else if (airSpeed > 40 && airSpeed <= 200)
@@ -162,9 +130,15 @@ void loop()
 
   endTime = millis();
 
-  fps = 1000/(endTime - startTime);
+  fps = 1000 / (endTime - startTime);
 
   Serial.println(1000 / (endTime - startTime));
+
+  if (prevInstrumentBrightnessRatio != instrumentBrightnessRatio) // there is a change in brighness, execute code
+  {
+    analogWrite(TFT_BL, instrumentBrightness);
+    prevInstrumentBrightnessRatio = instrumentBrightnessRatio;
+  }
 }
 
 void checkI2CMesage()
@@ -179,7 +153,11 @@ void checkI2CMesage()
       // data is a string in message[] and 0x00 terminated
       // do something with your received data
       // Serial.print("MessageID is -1 and Payload is: "); Serial.println(message);
-      setAirspeed(atof(message));
+      if(atof(message) == -1 || atof(message) == -2)
+        analogWrite(TFT_BL, LOW);
+      else 
+        analogWrite(TFT_BL, instrumentBrightness);
+
       break;
 
     case 0:
@@ -219,6 +197,7 @@ void setAirspeed(float value)
 void setInstrumentBrightnessRatio(float ratio)
 {
   instrumentBrightnessRatio = ratio;
+  instrumentBrightness = round(scaleValue(instrumentBrightnessRatio, 0.15, 1, 0, 255));
 }
 
 float scaleValue(float x, float in_min, float in_max, float out_min, float out_max)
