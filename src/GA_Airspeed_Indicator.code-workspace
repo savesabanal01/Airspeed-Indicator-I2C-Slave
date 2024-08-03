@@ -1,0 +1,64 @@
+{
+	"folders": [
+		{
+			"path": "../../GA_Airspeed_Indicator"
+		},
+		{
+			"name": "Airspeed Indicator",
+			"path": "../../Airspeed Indicator"
+		},
+		{
+			"name": "Airspeed Indicator 2",
+			"path": "../../Airspeed Indicator 2"
+		},
+		{
+			"name": "ESP32 Test",
+			"path": "../../ESP32 Test"
+		},
+		{
+			"name": "Airspeed Indicator ESP32-S3",
+			"path": "../../Airspeed Indicator ESP32-S3"
+		},
+		{
+			"name": "Airspeed Indicator ESP32-S3 ILI9341",
+			"path": "../../Airspeed Indicator ESP32-S3 ILI9341"
+		},
+		{
+			"name": "Airspeed Indicator 320x240 RP2040",
+			"path": "../../Airspeed Indicator 320x240 RP2040"
+		},
+		{
+			"name": "Vertical Speed Indicator PoC",
+			"path": "../../Vertical Speed Indicator PoC"
+		},
+		{
+			"name": "GA_Vertical_Speed_Indicator",
+			"path": "../../GA_Vertical_Speed_Indicator"
+		},
+		{
+			"name": "Turn Coordinator PoC",
+			"path": "../../Turn Coordinator PoC"
+		},
+		{
+			"name": "GA_Turn_Coordinator",
+			"path": "../../GA_Turn_Coordinator"
+		},
+		{
+			"name": "RP2040 Blink Test",
+			"path": "../../RP2040 Blink Test"
+		},
+		{
+			"name": "Airspeed Indicator I2C Slave",
+			"path": ".."
+		},
+		{
+			"name": "Turn Coordinator I2C Slave",
+			"path": "../../Turn Coordinator I2C Slave"
+		},
+		{
+			"name": "ThreeSFlightSimsI2C",
+			"path": "../../ThreeSFlightSimsI2C"
+		}
+	],
+	"settings": {}
+}
