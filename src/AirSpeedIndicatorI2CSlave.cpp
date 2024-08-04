@@ -25,7 +25,7 @@ float endTime;
 float airSpeed = 0;          // Indicated AirSpeed from Sim
 float ASIneedleRotation = 0; // angle of rotation of needle based on the Indicated AirSpeed
 float instrumentBrightnessRatio = 1;
-int instrumentBrightness = 1;
+int instrumentBrightness = 255;
 float prevInstrumentBrightnessRatio = 0; // previous value of instrument brightness. If no change do not set instrument brightness to avoid flickers
 float fps = 0;                           // frames per second for testing
 
@@ -153,7 +153,7 @@ void checkI2CMesage()
       // data is a string in message[] and 0x00 terminated
       // do something with your received data
       // Serial.print("MessageID is -1 and Payload is: "); Serial.println(message);
-      if(atof(message) == -1 || atof(message) == -2)
+      if(atof(message) < 0)
         analogWrite(TFT_BL, LOW);
       else 
         analogWrite(TFT_BL, instrumentBrightness);
