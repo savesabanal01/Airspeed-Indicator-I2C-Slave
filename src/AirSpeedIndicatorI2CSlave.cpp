@@ -139,6 +139,7 @@ void loop()
     analogWrite(TFT_BL, instrumentBrightness);
     prevInstrumentBrightnessRatio = instrumentBrightnessRatio;
   }
+
 }
 
 void checkI2CMesage()
@@ -153,11 +154,6 @@ void checkI2CMesage()
       // data is a string in message[] and 0x00 terminated
       // do something with your received data
       // Serial.print("MessageID is -1 and Payload is: "); Serial.println(message);
-      if(atof(message) < 0)
-        analogWrite(TFT_BL, LOW);
-      else 
-        analogWrite(TFT_BL, instrumentBrightness);
-
       break;
 
     case 0:
