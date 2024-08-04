@@ -42,11 +42,6 @@ TFT_eSPI tft = TFT_eSPI(); // Invoke custom library
 
 TFT_eSprite mainSpr = TFT_eSprite(&tft);         // Main Sprite
 TFT_eSprite ASIneedleSpr = TFT_eSprite(&tft);    // Airspeed Indicator Gauge Sprite
-TFT_eSprite asiInfoSpr = TFT_eSprite(&tft);      // Sprite to hold Air Speed Value
-TFT_eSprite tasInfoSpr = TFT_eSprite(&tft);      // Sprite to hold True Air Speed Value
-TFT_eSprite altitudeInfoSpr = TFT_eSprite(&tft); // Sprite to hold Altitude
-TFT_eSprite vsiInfoSpr = TFT_eSprite(&tft);      // Sprite to hold Vertical Speed Info
-TFT_eSprite baroInfoSpr = TFT_eSprite(&tft);     // Sprite to hold Barometric Pressure Info
 
 void setup()
 {
